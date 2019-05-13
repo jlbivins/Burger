@@ -4,7 +4,7 @@
 // ==============================================================================
 
 var express = require("express");
-
+var bodyParser = require("body-parser");
 // ==============================================================================
 // EXPRESS CONFIGURATION
 // This sets up the basic properties for our express server
@@ -16,15 +16,27 @@ var app = express();
 // Sets an initial port. We"ll use this later in our listener
 var PORT = process.env.PORT || 3001;
 
-// Sets up the Express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static("public"));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
+
+var exphbs = require("express-handlebars");
 
 // ================================================================================
-// ROUTER
-// The below points our server to a series of "route" files.
-// These routes give our server a "map" of how to respond when users visit or request data from various URLs.
+// burgerController.js
 // ================================================================================
 
-//require("./routes/apiRoutes")(app);
-//require("./routes/htmlRoutes")(app);
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+var routes = require("./controllers/burgers_Controller.js");
+
+app.use(routes);
+
+app.listen(PORT, function() {
+  console.log("Listening on port:%s", PORT);
+});
