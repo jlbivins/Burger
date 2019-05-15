@@ -12,12 +12,12 @@ router.get("/", function(req, res) {
 // Create all our routes and set up logic within those routes where required.
 router.get("/burgers", function(req, res) {
   burger.all(function(data) {
-    var hbsObject = {
-      burger: data
-    };
-    console.log(hbsObject);
+    // var hbsObject = {
+    //   burger: data
+    // };
     // wrapper for orm.js that using MySQL query callback will return data, render to index with handlebar
-    res.render("index", hbsObject);
+    res.render("index", {burger : data});
+    console.log(burger);
   });
 });
 //*************************************************/
